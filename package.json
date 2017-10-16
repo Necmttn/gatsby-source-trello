@@ -1,7 +1,7 @@
 {
   "name": "gatsby-source-trello",
   "version": "1.0.0",
-  "description": "",
+  "description": "gatsby source plugin for trello",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
