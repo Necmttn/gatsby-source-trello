@@ -33,7 +33,7 @@ exports.sourceNodes = async (
   const data = TrelloSource.getBoards(boardId)
 
   // Process data into nodes.
-  // data.forEach(datum => createNode(processDatum(datum)))
+  data.forEach(datum => createNode(processDatum(datum)))
 
   // We're done, return.
   return

@@ -4,11 +4,12 @@
   "description": "gatsby source plugin for trello",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Necmettin Karakaya",
   "license": "ISC",
   "dependencies": {
+    "jest": "^21.2.1",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"
   }
