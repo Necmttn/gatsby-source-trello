@@ -4,7 +4,7 @@
   "description": "gatsby source plugin for trello",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watch"
   },
   "author": "Necmettin Karakaya",
   "license": "ISC",
