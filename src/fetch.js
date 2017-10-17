@@ -12,6 +12,7 @@ class TrelloSource {
   async getBoards(id) {
     const url = `${this.TrelloBaseURL}/boards/${id}?fields=id,name&lists=open&list_fields=id,name&key=${this._key}&token=${this._secret}`
     try {
+      console.log(url)
       const data = await request.get(url)
       return data
     } catch (err) {

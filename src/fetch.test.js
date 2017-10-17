@@ -20,7 +20,7 @@ describe('Genereal Type Checkings', () => {
   test('return data', async () => {
     const fetcher = new TrelloSource(API_KEY, SECRET)
 
-    const list = await fetcher.getBoards('u1Rg4E5s')
+    const list = await fetcher.getBoards('571680f0c1a563f82af4b31f')
     expect(data).toBe('something')
   })
 })
