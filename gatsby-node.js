@@ -1,5 +1,5 @@
 const { TrelloSource } = require('./fetch.js');
-const crypto = require('crypto')
+const crypto = require('crypto');
 
 let _verbose;
 let _apiKey;
@@ -26,11 +26,8 @@ exports.sourceNodes = async ({ boundActionCreators },
 
     _boards.map(async board => {
       let data = await fetcher.getBoards(board.id);
-      data = JSON.parse(data)
-      const digest = crypto
-        .createHash(`md5`)
-        .update(JSON.stringify(data))
-        .digest(`hex`)
+      data = JSON.parse(data);
+      const digest = crypto.createHash(`md5`).update(JSON.stringify(data)).digest(`hex`);
       const boardID = data.id;
       const boardName = data.name;
       const lists = data.lists;
@@ -43,10 +40,10 @@ exports.sourceNodes = async ({ boundActionCreators },
         parent: null,
         internal: {
           type: `TrelleBoard`,
-          contentDigest: digest,
-        },
+          contentDigest: digest
+        }
       };
-      console.log(node)
+      console.log(node);
       createNode(node);
     });
   } catch (error) {

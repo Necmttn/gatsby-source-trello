@@ -4,11 +4,17 @@
   "description": "gatsby source plugin for trello",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "build": "babel src --out-dir . --ignore __tests__",
+    "prepublish": "cross-env NODE_ENV=production npm run build",
+    "watch": "babel -w src --out-dir . --ignore __tests__"
   },
   "author": "Necmettin Karakaya",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "cross-env": "^5.1.0",
+    "crypto": "^1.0.1",
     "jest": "^21.2.1",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"
