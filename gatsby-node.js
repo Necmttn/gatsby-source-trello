@@ -19,43 +19,44 @@ exports.sourceNodes = async ({ boundActionCreators }, {
   _boards = boards;
   try {
     const fetcher = new TrelloSource(_apiKey, _secret);
-    const NewNodes = []; // initiliaze empty array for nodes.
-    _boards.map(async board => {
-      const raw = await fetcher.getBoards(board.id);
-      const data = JSON.parse(raw);
-      const boardID = data.id;
-      const boardName = data.name;
-      const lists = data.lists;
-      const cards = data.cards;
-      lists.map(list => {
-        const digest = crypto.createHash(`md5`).update(JSON.stringify(list)).digest(`hex`);
-        const node = Object.assign(list, {
-          id: boardID,
-          children: [],
-          parent: `root`,
-          internal: {
-            type: `TrelloList`,
-            contentDigest: digest
-          }
-        });
-        NewNodes.push(node);
+    console.log('started');
+    console.log(_boards);
+
+    // _boards.map(async board => {
+    const raw = await fetcher.getBoards(_boards[0].id);
+    const data = JSON.parse(raw);
+    const boardID = data.id;
+    const boardName = data.name;
+    const lists = data.lists;
+    const cards = data.cards;
+    lists.map(list => {
+      const digest = crypto.createHash(`md5`).update(JSON.stringify(list)).digest(`hex`);
+      const node = Object.assign(list, {
+        children: [],
+        parent: `root`,
+        internal: {
+          type: `TrelloList`,
+          contentDigest: digest
+        }
       });
-      cards.map(card => {
-        const digest = crypto.createHash(`md5`).update(JSON.stringify(card)).digest(`hex`);
-        const node = Object.assign(card, {
-          id: boardID,
-          children: [],
-          parent: `root`,
-          internal: {
-            type: `TrelloCard`,
-            content: 'neco',
-            contentDigest: digest
-          }
-        });
-        NewNodes.push(node);
+      createNode(node);
+      console.log(node);
+    });
+    cards.map(card => {
+      const digest = crypto.createHash(`md5`).update(JSON.stringify(card)).digest(`hex`);
+      const node = Object.assign(card, {
+        children: [],
+        parent: `root`,
+        internal: {
+          type: `TrelloCard`,
+          content: 'neco',
+          contentDigest: digest
+        }
       });
-    }); // boards map ends here.
-    NewNodes.map(node => createNode(node));
+      createNode(node);
+      console.log(node);
+    });
+    // }); // boards map ends here.
   } catch (error) {
     console.error(error);
     process.exit(1);

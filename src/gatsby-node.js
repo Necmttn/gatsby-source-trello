@@ -22,9 +22,11 @@ exports.sourceNodes = async (
   _boards = boards;
   try {
     const fetcher = new TrelloSource(_apiKey, _secret);
-    const NewNodes = [] // initiliaze empty array for nodes.
-    _boards.map(async board => {
-      const raw = await fetcher.getBoards(board.id);
+    console.log('started');
+    console.log(_boards);
+
+    // _boards.map(async board => {
+      const raw = await fetcher.getBoards(_boards[0].id);
       const data = JSON.parse(raw)
       const boardID = data.id
       const boardName = data.name
@@ -38,7 +40,6 @@ exports.sourceNodes = async (
         const node = Object.assign(
           list,
           {
-            id: boardID,
             children: [],
             parent: `root`,
             internal: {
@@ -47,7 +48,8 @@ exports.sourceNodes = async (
             },
           },
         );
-        NewNodes.push(node)
+        createNode(node);
+        console.log(node)
       })
       cards.map( card => {
         const digest = crypto
@@ -57,7 +59,6 @@ exports.sourceNodes = async (
         const node = Object.assign(
           card,
           {
-            id: boardID,
             children: [],
             parent: `root`,
             internal: {
@@ -67,10 +68,10 @@ exports.sourceNodes = async (
             },
           },
         );
-        NewNodes.push(node)
+        createNode(node);
+        console.log(node)
       })
-    }) // boards map ends here.
-    NewNodes.map(node => createNode(node))
+    // }); // boards map ends here.
   } catch (error) {
     console.error(error);
     process.exit(1);
