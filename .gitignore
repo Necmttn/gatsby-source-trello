@@ -1,1 +1,8 @@
 node_modules
+fetch.js
+fetch.test.js
+files.txt
+gatsby-node.js
+package-lock.json
+yarn.lock
+

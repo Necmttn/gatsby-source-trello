@@ -36,32 +36,62 @@ exports.sourceNodes = async (
       boards.map(rawBoard => {
         const board = JSON.parse(rawBoard)
         const cards = board.cards
-        //  TODO: createNode for cards
-        //  Create Connection with idList idBoard
         const lists = board.lists
-        //  TODO: createNode for lists
-        //  Create Connection with idBoard
-        //  The Order should be Boards first.
-        //  Then Lists.
-        //  Then Cards.
-        //
-       const digest = crypto
+        const boardDigest = crypto
          .createHash(`md5`)
          .update(JSON.stringify(board))
          .digest(`hex`)
-       const node = Object.assign(
-         board,
-         {
-           children: [],
-           parent: `root`,
-           internal: {
-             type: `TrelloBoard`,
-             contentDigest: digest,
-           },
-         },
-       );
-       createNode(node);
-       console.log(node)
+        const boardNode = Object.assign(
+          board,
+          {
+            children: [],
+            parent: `root`,
+            internal: {
+              type: `TrelloBoard`,
+              contentDigest: boardDigest,
+            },
+          },
+        );
+        createNode(boardNode);
+        // Create Node for each list
+        lists.map(list => {
+          const listDigest = crypto
+            .createHash(`md5`)
+            .update(JSON.stringify(list))
+            .digest(`hex`)
+          console.log(list)
+          const listNode = Object.assign(
+            list,
+            {
+              children: [],
+              parent: list.idBoard,
+              internal: {
+                type: `TrelloList`,
+                contentDigest: listDigest,
+              },
+            },
+          );
+          createNode(listNode);
+        })
+        // Create Node for each Card
+        cards.map(card => {
+          const cardDigest = crypto
+            .createHash(`md5`)
+            .update(JSON.stringify(card))
+            .digest(`hex`)
+          const cardNode = Object.assign(
+            card,
+            {
+              children: [],
+              parent: card.idList,
+              internal: {
+                type: `TrelloCard`,
+                contentDigest: cardDigest,
+              },
+            },
+          );
+          createNode(cardNode);
+        })
       })
     })
   } catch (error) {
