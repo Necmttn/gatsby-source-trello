@@ -4,77 +4,68 @@ const crypto = require('crypto')
 let _verbose;
 let _apiKey;
 let _secret;
-let _boards;
+let _teamId;
 
 exports.sourceNodes = async (
   { boundActionCreators },
   {
     apiKey,
     secret,
-    boards,
+    teamId,
     verboseOutput = false
-  },
+  }
 ) => {
   const { createNode } = boundActionCreators;
   _verbose = verboseOutput;
   _apiKey = apiKey;
   _secret = secret;
-  _boards = boards;
+  _teamId = teamId;
   try {
-    const fetcher = new TrelloSource(_apiKey, _secret);
-    console.log('started');
-    console.log(_boards);
+    const fetcher = new TrelloSource(_apiKey, _secret)
+    const raw = await fetcher.getTeam(_teamId)
+    const data = JSON.parse(raw)
+    const boardIDs = data.idBoards
 
-    // _boards.map(async board => {
-      const raw = await fetcher.getBoards(_boards[0].id);
-      const data = JSON.parse(raw)
-      const boardID = data.id
-      const boardName = data.name
-      const lists = data.lists
-      const cards = data.cards
-      lists.map( list => {
-        const digest = crypto
-          .createHash(`md5`)
-          .update(JSON.stringify(list))
-          .digest(`hex`)
-        const node = Object.assign(
-          list,
-          {
-            children: [],
-            parent: `root`,
-            internal: {
-              type: `TrelloList`,
-              contentDigest: digest,
-            },
-          },
-        );
-        createNode(node);
-        console.log(node)
+    const promiseArray = []
+
+    boardIDs.map(async id => {
+      promiseArray.push(fetcher.getBoards(id))
+    })
+
+    await Promise.all(promiseArray).then(async (boards) => {
+      boards.map(rawBoard => {
+        const board = JSON.parse(rawBoard)
+        const cards = board.cards
+        //  TODO: createNode for cards
+        //  Create Connection with idList idBoard
+        const lists = board.lists
+        //  TODO: createNode for lists
+        //  Create Connection with idBoard
+        //  The Order should be Boards first.
+        //  Then Lists.
+        //  Then Cards.
+        //
+       const digest = crypto
+         .createHash(`md5`)
+         .update(JSON.stringify(board))
+         .digest(`hex`)
+       const node = Object.assign(
+         board,
+         {
+           children: [],
+           parent: `root`,
+           internal: {
+             type: `TrelloBoard`,
+             contentDigest: digest,
+           },
+         },
+       );
+       createNode(node);
+       console.log(node)
       })
-      cards.map( card => {
-        const digest = crypto
-          .createHash(`md5`)
-          .update(JSON.stringify(card))
-          .digest(`hex`)
-        const node = Object.assign(
-          card,
-          {
-            children: [],
-            parent: `root`,
-            internal: {
-              type: `TrelloCard`,
-              content: 'neco',
-              contentDigest: digest,
-            },
-          },
-        );
-        createNode(node);
-        console.log(node)
-      })
-    // }); // boards map ends here.
+    })
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
-};
-
+}

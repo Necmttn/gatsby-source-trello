@@ -10,7 +10,13 @@ class TrelloSource {
   }
 
   async getBoards(id) {
-    const url = `${this.TrelloBaseURL}/boards/${id}?fields=id,name&lists=open&list_fields=id,name&cards=open&key=${this._key}&token=${this._secret}`;
+    const url = `${this.TrelloBaseURL}/boards/${id}?fields=all&lists=open&list_fields=id,name&cards=open&key=${this._key}&token=${this._secret}`;
+    const data = await request.get(url);
+    return data;
+  }
+
+  async getTeam(id) {
+    const url = `${this.TrelloBaseURL}/organizations/${id}?fields=all&key=${this._key}&token=${this._secret}`;
     const data = await request.get(url);
     return data;
   }
