@@ -5,7 +5,7 @@
 Source plugin for pulling data into Gatsby from Trello using `team`.
 
 <p align="center">
-	<img src="http://i.giphy.com/26gsiiMS8jcLUDVlu.gif">
+	<img src="https://raw.githubusercontent.com/Necmttn/gatsby-source-trello/master/logo.png">
 </p>
 
 ## Install
