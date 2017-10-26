@@ -59,7 +59,6 @@ exports.sourceNodes = async (
             .createHash(`md5`)
             .update(JSON.stringify(list))
             .digest(`hex`)
-          console.log(list)
           const listNode = Object.assign(
             list,
             {
