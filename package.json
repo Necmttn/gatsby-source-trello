@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-trello",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "gatsby source plugin for trello",
   "respository": {
     "type": "git",
