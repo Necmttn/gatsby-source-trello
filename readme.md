@@ -1,7 +1,7 @@
 # Gatsby Source From Trello Board.
 
 [![npm](https://img.shields.io/npm/dt/gatsby-source-trello.svg?style=flat-square)](https://www.npmjs.com/package/gatsby-source-trello)
-
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 Source plugin for pulling data into Gatsby from Trello using `team`.
 
 <p align="center">

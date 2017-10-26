@@ -2,7 +2,19 @@
   "name": "gatsby-source-trello",
   "version": "1.0.1",
   "description": "gatsby source plugin for trello",
+  "respository": {
+    "type": "git",
+    "url": "necmttn/gatsby-source-trello"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "trello",
+    "source",
+    "trello-as-a-cms"
+  ],
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "test": "jest --watch",
     "build": "babel src --out-dir . --ignore __tests__",
