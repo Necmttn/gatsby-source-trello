@@ -67,11 +67,11 @@ exports.sourceNodes = async (
             }
           });
           createNode(cardNode)
-        }); //cards map.
+        });
         // Create Node for each list
         lists.map(list => {
           const ownedCards = cards.filter(card => {
-            return card.listId = list.id
+            return card.idList === list.id
           }).map(card => {
             return card.id
           })
