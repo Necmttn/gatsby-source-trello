@@ -43,18 +43,23 @@ exports.sourceNodes = async ({ boundActionCreators }, {
             contentDigest: boardDigest
           }
         });
-        createNode(boardNode);
         // Create Node for each list
         lists.map(list => {
+          const childCards = cards.filter(card => {
+            return card.idList === list.id;
+          }).map(card => {
+            return card.id;
+          });
           const listDigest = crypto.createHash(`md5`).update(JSON.stringify(list)).digest(`hex`);
           const listNode = Object.assign(list, {
-            children: [],
+            children: childCards,
             parent: list.idBoard,
             internal: {
               type: `TrelloList`,
               contentDigest: listDigest
             }
           });
+          boardNode.children = boardNode.children.concat([listNode.id]);
           createNode(listNode);
         });
         // Create Node for each Card
@@ -71,7 +76,8 @@ exports.sourceNodes = async ({ boundActionCreators }, {
             }
           });
           createNode(cardNode);
-        });
+        }); //cards map.
+        createNode(boardNode);
       });
     });
   } catch (error) {
