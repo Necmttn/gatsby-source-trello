@@ -46,16 +46,32 @@ exports.sourceNodes = async (
           {
             children: [],
             parent: `root`,
+            lists___NODE: lists.map((list) => list.id),
             internal: {
               type: `TrelloBoard`,
               contentDigest: boardDigest,
             },
           },
         );
+        // Create Node for each Card
+        cards.map(card => {
+          const cardDigest = crypto.createHash(`md5`).update(JSON.stringify(card)).digest(`hex`);
+          const cardNode = Object.assign(card, {
+            children: [],
+            parent: `root`,
+            internal: {
+              content: card.desc,
+              mediaType: `text/markdown`,
+              type: `TrelloCard`,
+              contentDigest: cardDigest
+            }
+          });
+          createNode(cardNode)
+        }); //cards map.
         // Create Node for each list
         lists.map(list => {
-          const childCards =  cards.filter( card=> {
-            return card.idList === list.id
+          const ownedCards = cards.filter(card => {
+            return card.listId = list.id
           }).map(card => {
             return card.id
           })
@@ -66,32 +82,17 @@ exports.sourceNodes = async (
           const listNode = Object.assign(
             list,
             {
-              children: childCards,
-              parent: list.idBoard,
+              children: [],
+              parent: `root`,
+              cards___NODE: ownedCards,
               internal: {
                 type: `TrelloList`,
                 contentDigest: listDigest,
               },
             },
           );
-          boardNode.children = boardNode.children.concat([listNode.id])
           createNode(listNode);
         })
-        // Create Node for each Card
-        cards.map(card => {
-          const cardDigest = crypto.createHash(`md5`).update(JSON.stringify(card)).digest(`hex`);
-          const cardNode = Object.assign(card, {
-            children: [],
-            parent: card.idList,
-            internal: {
-              content: card.desc,
-              mediaType: `text/markdown`,
-              type: `TrelloCard`,
-              contentDigest: cardDigest
-            }
-          });
-          createNode(cardNode)
-        }); //cards map.
         createNode(boardNode);
       })
     })
