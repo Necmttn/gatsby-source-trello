@@ -64,6 +64,8 @@ exports.sourceNodes = async ({ boundActionCreators }, {
             children: [],
             parent: card.idList,
             internal: {
+              content: card.desc,
+              mediaType: `text/markdown`,
               type: `TrelloCard`,
               contentDigest: cardDigest
             }

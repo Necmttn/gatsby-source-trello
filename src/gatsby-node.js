@@ -74,23 +74,19 @@ exports.sourceNodes = async (
         })
         // Create Node for each Card
         cards.map(card => {
-          const cardDigest = crypto
-            .createHash(`md5`)
-            .update(JSON.stringify(card))
-            .digest(`hex`)
-          const cardNode = Object.assign(
-            card,
-            {
-              children: [],
-              parent: card.idList,
-              internal: {
-                type: `TrelloCard`,
-                contentDigest: cardDigest,
-              },
-            },
-          );
-          createNode(cardNode);
-        })
+          const cardDigest = crypto.createHash(`md5`).update(JSON.stringify(card)).digest(`hex`);
+          const cardNode = Object.assign(card, {
+            children: [],
+            parent: card.idList,
+            internal: {
+              content: card.desc,
+              mediaType: `text/markdown`,
+              type: `TrelloCard`,
+              contentDigest: cardDigest
+            }
+          });
+          createNode(cardNode)
+        });
       })
     })
   } catch (error) {
