@@ -10,7 +10,7 @@ class TrelloSource {
   }
 
   async getBoards(id) {
-    const url = `${this.TrelloBaseURL}/boards/${id}?fields=all&lists=all&cards=all&key=${this._key}&token=${this._secret}`;
+    const url = `${this.TrelloBaseURL}/boards/${id}?fields=all&lists=all&cards=all&customFields=true&card_customFieldItems=true&key=${this._key}&token=${this._secret}`;
     const data = await request.get(url);
     return data;
   }
